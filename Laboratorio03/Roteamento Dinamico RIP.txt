@@ -1,0 +1,21 @@
+Diferença entre os protocolos: IGRP, EIGRP, OSPF, RIP.
+Configuração de VLANs, Troncos, VTP, Ethernet, SWL 3
+ACLs: Firewall, Lista de Acesso.
+
+
+
+RIP 2 - Permite apenas 15 saltos
+[Router - 10.10.10.10]
+Router(config)#router rip
+Router(config-router)#version 2
+Router(config-router)#network 10.10.10.8 / Qual é a rede que está directamente ligada a mim?
+Router(config-router)#exit
+Router(config)#
+
+[Router - 10.10.10.4]
+Router(config)#router rip
+Router(config-router)#version 2 | ve 2 # Se não colocar explícitamente ele coloca ve 1
+Router(config-router)#network 10.10.10.4
+Router(config-router)#network 10.10.10.8
+Router(config-router)#exit
+Router(config)#

@@ -1,0 +1,22 @@
+en
+config t
+hostname CORE
+interface gigabitEthernet 0/0
+ip address 172.16.20.33 255.255.255.240
+no shutdown
+exit
+ip dhcp exclude-address 172.16.20.33 172.16.20.34
+ip dhcp pool LAN1
+network 172.16.20.32 255.255.255.240
+default-router 172.16.20.33
+dns-server 8.8.8.8
+
+do wr : para salvar
+
+PC 1
+Desktop -> IP Configuration -> DHCP
+
+PC 2
+Desktop -> IP Configuration -> DHCP
+
+ip route 192.168.1.0 255.255.255.224 192.168.1.65

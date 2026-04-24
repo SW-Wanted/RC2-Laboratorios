@@ -1,0 +1,132 @@
+RC2 - Laboratório
+
+Laboratório #4
+
+
+Topologia
+3 Routers (2911)
+: Desligar os routers
+: Adicionar os môdulos HWIC-2T da direita para esquerda
+: Ligar os routers
+: Conectar o cabo Serial DCE entre os routers, o router que você escolhe primeiro será onde vai ter o comando clock rate 56000
+[Router-1]
+Serial DCE
+[Router-2]
+Serial DCE
+[Router-3]
+
+[Router-1]
+en
+config t
+hostname Central
+int s0/0/0
+ip address 10.10.10.5 255.255.255.252
+clock rate 500
+no sh
+int s0/0/1
+ip addres 10.10.10.9 255.255.255.252 
+clock rate 5600
+no sh
+
+[Router-2]
+en
+config t
+hostname LAN1
+interface s0/0/1
+ip addres 10.10.10.6 255.255.255.252
+no sh
+
+
+[Router-3]
+en
+config t
+hostname LAN2
+interface s0/0/1
+ip address 10.10.10.10 255.255.255.252
+no sh
+
+Do Router 1 até o Router 3 não existe comunicação, então vamos fazer um roteamento dinâmico com o RIP.
+
+[Central]
+router rip
+ver 2
+network 10.10.10.4
+network 10.10.10.8
+no auto-summary
+
+[LAN1]
+router rip
+ver 2
+network 10.10.10.4
+no auto-summary
+
+[LAN2]
+LAN2(config)#router rip
+LAN2(config router)#ver 2
+LAN2(config router)#network 10.10.10.8
+LAN2(config router)#no auto-summary
+
+
+Adicionar 2 Switch (2960) + 4 PCs. Essas são redes locais. Cada switch está ligado com 2 computadores.
+
+Ligar com cabos fast-ethernet
+
+
+[LAN1] -> [Switch] : 172.20.10.32/27
+[LAN2] -> [Switch] : 172.20.10.64/26
+
+
+=== DHCP ===
+[LAN1]
+config t
+interface gig0/0
+ip address 172.20.10.33 255.255.255.224
+no sh
+LAN1(config)#ip dhcp excluded-address 172.20.10.33 172.20.10.34
+LAN1(config)# ip dhcp pool LAN1
+LAN1(dhcp-config)#network 172.20.10.32 255.255.255.224
+LAN1(dhcp-config)#default router 172.20.10.33
+LAN1(dhcp-config)#dns-server 8.8.8.8
+LAN1(dhcp-config)#exit
+
+
+[PC0] -> [IP Configuration] active DHCP
+[PC1] -> [IP Configuration] active DHCP
+
+=== DHCP ===
+[LAN2]
+config t
+interface gig0/0
+ip address 172.20.10.65 255.255.255.192
+no sh
+LAN2(config)#ip dhcp excluded-address 172.20.10.65 172.20.10.192
+LAN2(config)# ip dhcp pool LAN2
+LAN2(dhcp-config)#network 172.20.10.64 255.255.255.192
+LAN2(dhcp-config)#default router 172.20.10.65
+LAN2(dhcp-config)#dns-server 8.8.8.8
+LAN2(dhcp-config)#exit
+
+[PC2] -> [IP Configuration] active DHCP
+[PC3] -> [IP Configuration] active DHCP
+
+-------------------------------------------------------------
+Adicionar as Redes LANs aos RIPs
+
+[Switch0]
+router rip
+ver 2
+network 172.20.10.32
+no auto-summary
+
+[Switch1]
+router rip
+ver 2
+network 172.20.10.64
+no auto-summary
+
+Configurar NAT Estático, quando mandar um ping de um PC para o servidor, o IP deste PC deve ser diferente da que ele usou para pingar.
+
+Até agora o único serviço é de DHCP
+
+Adicione 2 servidores com os serviços de Servidor1 (DNS, NAT) e Servidor2 (HTTPs - colocar um website aqui)-
+

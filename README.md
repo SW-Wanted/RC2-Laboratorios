@@ -8,3 +8,4 @@
 | [Laboratório 01](./Laboratorio01) | Roteamento Estático | ✅ Concluído  |
 | [Laboratório 02](./Laboratorio02) | Roteamento Dinâmico | ✅ Concluído  |
 | [Laboratório 03](./Laboratorio03) | Roteamento Dinâmico (RIP) | ✅ Concluído |
+| [Laboratório 03](./Laboratorio03) | RIP + DHCP + NAT + DNS + HTTPS | ⏳ Em progresso |
